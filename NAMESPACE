@@ -1,0 +1,16 @@
+# Required packages: sensitivity (various functions), Hmisc and ks (single function from each)
+importFrom(Hmisc, Ecdf)
+import(boot)
+import(sensitivity)
+# Loads the correlation correction code from C
+useDynLib(pse)
+# Exporting the replacement method for plotting pcc results
+S3method(plot, pcc)
+S3method(tell, LHS)
+S3method(print, LHS)
+S3method(sbma, default)
+S3method(sbma, LHS)
+
+# Explicitly exports the LHS methods
+export(get.data, get.results, get.N, get.ninputs, get.noutputs, get.repetitions)
+export(corPlot, LHScorcorr, LHS, plotecdf, plotprcc, sbma, target.sbma, pic, cv, plotcv)
