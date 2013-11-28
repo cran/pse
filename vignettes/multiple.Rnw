@@ -40,7 +40,7 @@ Rua do Matão travessa 14 n\textordmasculine \ 321, São Paulo, SP, CEP 05508-90
 \and
   Prado, P.I. \footnotemark[1]
 }
-\date{Version 0.3.0, November 23, 2013} 
+\date{Version 0.3.1, November 23, 2013} 
 \maketitle
 
 This document presents an extension to the practical tutorial 
@@ -91,17 +91,20 @@ modelRun <- function (my.data){
 
 We then generate a Latin Hypercube where parameters $x_i$ will be varied uniformly between 0 and 1.
 The code for a hypercube with a single run at each point and resulting partial correlation plot is:
+
 <<LHS1, fig=T>>=
 library(pse)
 LHS1 <- LHS(modelRun, N=300, factors=4, nboot=50)
 plotprcc(LHS1)
 @
+
 Now, we take a look at the same model, but {\em repeating} the simulation
 several times for each data point and averaging the results. The
 {\em repetitions} argument sets the number of evaluations for each
 combination of parameters. Note that the
 total number of model evaluations ($N \cdot repetitions$) is the same,
 in our case, as the LHS1 defined above: 
+
 <<LHS2, fig=T>>=
 LHS2 <- LHS(modelRun, N=60, factors=4, repetitions=5, nboot=50)
 plotprcc(LHS2)

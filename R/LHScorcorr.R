@@ -20,12 +20,12 @@ internal.LHScorcorr <-
 		# Skipping this column: maximum iterations for the same variable
 		# If maxIt is set to -1, NEVER gives up
 		if (it > maxIt | maxIt < 0) { 
-			print("Warning in internal.LHScorcorr: correlation does not converge after maximum iterations");
+			warning("LHScorcorr: correlation does not converge after maximum iterations");
 			return (internal.LHScorcorr (vars, COR, l = l + 1, eps = eps, it = 1, echo=echo, maxIt=maxIt));
 		}
-		if (echo==T) print(paste("Info: Correlation correction being made for l =",l,"/",M))
+		if (echo==T) cat(paste("Info: Correlation correction being made for l =",l,"/",M, "\n"))
 		# Here we start correcting the correlation for var[,l]
-		V <- .C("corcorr", vars=as.double(as.matrix(vars)),cor=as.double(COR), N=as.integer(N), M=as.integer(M), l=as.integer(l), FLAGSTOP=as.integer(0))
+		V <- .C(corcorr, vars=as.double(as.matrix(vars)),cor=as.double(COR), N=as.integer(N), M=as.integer(M), l=as.integer(l), FLAGSTOP=as.integer(0))
 		vars <- as.data.frame(matrix(V$vars, nrow=N, ncol=M))
 		names(vars) <- my.names
 		if (V$FLAGSTOP == 1) { # Convergence, going for next

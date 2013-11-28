@@ -83,7 +83,7 @@ LHS(model = NULL, factors, N, q, q.arg, res.names = NULL,
 McKay, M.D. and Beckman, R.J. A comparison of three methods for selecting values of input variables in the analysis of output from a computer code, Technometrics. 1979, 21: 239-244
 }
 \examples{
-completelHS <- LHS(model=function(x) x[,1]+x[,2]*x[,3], factors=3, N=20)
+completeLHS <- LHS(model=function(x) x[,1]+x[,2]*x[,3], factors=3, N=20)
 incompleteLHS <- LHS(factors=5, N=30)
 incompleteLHS <- tell(incompleteLHS, seq(1,30))
 }
