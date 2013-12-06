@@ -1,0 +1,10 @@
+2013-12-05	Andre Chalom 
+	* DESCRIPTION: Version is 0.3.1
+	* NAMESPACE: Changed the registration of the C code to prevent bugs with reference to "corcorr"
+	* R/LHScorcorr.R: Changed "print" to "warning" in warnings
+	* R/scatterplot.R, man/scatterplot.Rd: renamed "corPlot" to "plotscatter"
+	* R/plotcv.R, R/plotscatter.R: fixed some bugs
+	* vignettes/pse_tutorial.Rnw: clarifications and examples
+
+2013-11-11	Andre Chalom
+	* First public version

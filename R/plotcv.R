@@ -1,5 +1,8 @@
 # Coefficient of variation
-cv <- function(x, ...) sd(x, ...)/mean(x, ...)
+cv <- function(x, ...) {
+	if (mean(x, ...) == 0) return (0)
+	else return (sd(x, ...)/mean(x, ...))
+}
 
 plotcv <- function(x, stack = FALSE, index.res = 1, col = index.res, ...) { 
 	if (stack)
@@ -13,7 +16,8 @@ plotcv <- function(x, stack = FALSE, index.res = 1, col = index.res, ...) {
 	pointwise <- apply(get.results(x, FALSE), c(1,2), cv)
 	global <- cv(get.results(x, TRUE))
 	m <- max(pointwise, 1.05*global)
-	Ecdf(pointwise, xlim=c(min(pointwise), m), xlab="pointwise cv", col=col, ...)
+	mi <- min(pointwise, global)
+	Ecdf(pointwise, xlim=c(mi, m), xlab="pointwise cv", col=col, ...)
 	abline(v=global, lwd=2, lty=3)
 	if (m > 0.8*max(pointwise)) {pos=2} else {pos=4}
 	text(x=global, y=0.1, label="global cv", pos=pos)

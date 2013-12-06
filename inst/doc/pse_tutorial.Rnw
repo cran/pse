@@ -39,7 +39,7 @@ Rua do Matão travessa 14 n\textordmasculine \ 321, São Paulo, SP, CEP 05508-90
 \footnote{email: andrechalom@gmail.com} 
 \and
 Mandai, C.Y. \footnotemark[1] \and  Prado, P.I. \footnotemark[1]}
-\date{Version 0.3.0, November 23, 2013} 
+\date{Version 0.3.1, November 23, 2013} 
 \maketitle
 
 This document presents a brief practical tutorial about the use of
@@ -60,10 +60,14 @@ researchers who already use it will be able to write code with the pse
 package easily. Major differences will be noted on the help pages and
 in this tutorial.
 
+This tutorial focuses on the parameter space exploration of deterministic 
+models. For a discussion of stochastic models, see the `multiple' vignette 
+on the same package.
+
 \section{Input parameters}
 The first thing that must be done is to determine exactly what are
 the input parameters to your model. You should list which parameters
-should be investigated, what are the probability distribution functions (PDFs)
+should be investigated, what are the probability density functions (PDFs)
 from which the parameter values will be calculated, and what are
 the arguments to these PDFs.
 
@@ -77,7 +81,7 @@ or diminish after the following expression:
 		X_{t+1} = X_t + r X_t \left(1-X_t/K \right)
 \end{equation}
 
-We are insterested in studying the effects of the parameters $r$, $K$
+We are interested in studying the effects of the parameters $r$, $K$
 and $X_0$ on the final population. After researching on our databases,
 we have decided that, for our species of interest, $r$ and $K$ follow
 a normal distribution with known parameters. However, we could not
@@ -98,9 +102,9 @@ The following table summarizes this:
 		\end{center}
 
 We next translate this table to three \R objects that will be used
-in the sensitivity analyses, containing the names of the parameters,
-the distribution functions, and {\em a list containing the lists} with 
-all the parameters to the distribution functions:
+in the sensitivity analyses, containing (1) the names of the parameters, (2) 
+the probability density functions, and (3) {\em a list containing the lists} with 
+all the parameters to the density functions:
 
 <<params>>=
 factors <- c("r", "K", "X0")
@@ -144,6 +148,12 @@ and $\hat{g}$ is the growth probability for each surviving individual.
 We can relate these parameters to the former ones, as $G = \hat{s}*\hat{g}$ and
 $S = \hat{s} * (1-\hat{g})$.
 
+\textbf{Note:}
+
+When transforming parameters like done on the above examples, it is important
+to remember that the new parameters may not have the same probability density
+functions as the original ones. 
+
 \end{shaded}
 
 \subsection{Optional: More details about the quantiles}
@@ -163,7 +173,7 @@ a wrapper function for the \textbf{quantile} function:
 qdata <- function(p, data) quantile(x=data, probs=p)
 @
 
-A discrete uniform distribution function, usefull for parameters that
+A discrete uniform density function, usefull for parameters that
 must be integer numbers, can be given by
 <<qdunif>>=
 qdunif<-function(p, min, max) floor(qunif(p, min, max))
@@ -234,7 +244,7 @@ To access the values of the parameters used in the model, use the function
 With the object returned by the function \textbf{LHS}, we will exemplify in this section
 four techniques that can be used: the uncertainty analysis using the \textbf{ecdf},
 scatterplots of the correlation between each parameter and the result using the function
-\textbf{corPlot}, partial rank correlation using the function \textbf{plotprcc} and
+\textbf{plotscatter}, partial rank correlation using the function \textbf{plotprcc} and
 agreement between different hypercube sizes with the function \textbf{sbma}.
 
 \cleardoublepage
@@ -261,7 +271,7 @@ Note that population sizes bifurcate above a given value of parameter $r$.
 This is a well known behaviour of many population models
 and will ultimately lead to chaotic solutions \cite{May1976, Murray02}.
 <<corplot, fig=T>>=
-corPlot(myLHS)
+plotscatter(myLHS)
 @
 
 \cleardoublepage
@@ -302,7 +312,8 @@ newLHS <- LHS(modelRun, factors, 250, q, q.arg)
 A value of -1 indicates complete disagreement between the runs, and a value
 of 1 indicates total agreement.	As the SBMA seldom reaches 1 for realistic models,
 some criterion must be used to indicate when the agreement should be considered
-good enough.
+good enough. More details about how the SBMA is calculated can be found on 
+\cite{Chalom12}.
 
 It should be stressed that there is no ``magical'' number for deciding how close
 to unity the SBMA should be. It is reasonable to expect agreements around 0.7 to 0.9
@@ -317,7 +328,12 @@ In the previous section, we have examined a model that
 returned a single number,
 namely, the final population. However, we might be interested 
 in examining the effects of the parameters in several distinct
-responses from the model. In our example, we are interested
+responses from the model. The responses may be (1) different variables,
+like ``total population'' and ``species richness'', (2) the same
+variable in different time points, or (3) the same variable 
+calculated by different methods.
+
+In our example, we are interested
 in determining the effect of the parameters to the population
 in each of the first 6 time steps. The theory and tools for 
 this analysis remain mostly the same. We will write our
@@ -372,7 +388,7 @@ will present results just for the time steps 1, 3 and 6,
 using the ``index.res'' parameter, and supress the
 linear model from being ploted with the parameter ``add.lm'':
 <<corplot2, fig=T>>=
-corPlot(myLHS, index.res=c(1,3,6), add.lm=FALSE)
+plotscatter(myLHS, index.res=c(1,3,6), add.lm=FALSE)
 @
 
 \cleardoublepage
@@ -406,7 +422,7 @@ In many scenarios, it is necessary to run the simulation and the analyses
 at different times, and even in different computers. It may be the case,
 for example, that your lab computer is not fast enough to run the simulations,
 but that the high-performance cluster in which the simulations 
-are to be run do not have \R installed. In order to do this, however, you 
+are to be run does not have \R installed.  In order to do this, however, you 
 must generate the Latin Hypercube in the lab computer, transfer this information
 to the cluster, run the simulations there, transfer the results back to the
 lab computer, and then run the analyses.
