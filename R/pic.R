@@ -16,25 +16,31 @@ estim.pic <- function(data, i = 1:nrow(data)) {
   return(pic)
 }
 
-pic <- function (LHS, nboot = 0, conf=0.95) {
+pic <- function (X, y, nboot, conf, ...) UseMethod("pic")
+pic.LHS <- function (X, y=NULL, nboot=0, conf=0.95, ...) {
+	res <- get.results(X)
+	L <- get.data(X)
+	f <- function(r) pic(X=L, y=r, nboot, conf, ...)
+	apply(res, 2, f)
+}
+pic.default <- function (X, y, nboot = 0, conf=0.95, ...) {
+	data <- cbind(Y=y, X)
 	if (nboot == 0) {
-		pic <- list()
-		for(i in 1:dim(get.results(LHS))[2]) {
-			data <- cbind(Y = get.results(LHS)[i], get.data(LHS))
-			pic[[i]] <- estim.pic(data)
-		}
-		pic <- as.data.frame(pic)
-		rownames(pic) <- colnames(get.data(LHS))
-		colnames(pic) <- colnames(get.results(LHS))
+		pic <- data.frame(original=estim.pic(data))
+		rownames(pic) <- colnames(X)
 	} else {
-		data <- cbind(Y=get.results(LHS), get.data(LHS))
-		## NAO funciona para mais de uma variavel resposta
 		boot.pic <- boot(data, estim.pic, R = nboot)
 		pic <- bootstats(boot.pic, conf, "basic")
-		rownames(pic) <- colnames(get.data(LHS))
+		rownames(pic) <- colnames(X)
 	}
-	out <- list(X = get.data(LHS), y = get.results(LHS), nboot = nboot, conf = conf,
+	out <- list(X = X, y = y, nboot = nboot, conf = conf,
 				call = match.call(), pic = pic)
 	class(out) <- "pic"
 	return(out)
+}
+
+print.pic <- function(x, ...) {
+  cat("\nCall:\n", deparse(x$call), "\n", sep = "")
+    cat("\nPartial Inclination Coefficients (PIC):\n")
+    print(x$pic)
 }

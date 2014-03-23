@@ -71,8 +71,7 @@ plotprcc(myLHS)
 ###################################################
 ### code chunk number 10: pic
 ###################################################
-p <- pic(myLHS)
-print(p$pic)
+pic(myLHS, nboot=40)
 
 
 ###################################################
@@ -137,20 +136,20 @@ targetLHS <- target.sbma (target=0.3, modelRun, factors,
 
 
 ###################################################
-### code chunk number 18: pse_tutorial.Rnw:433-435
+### code chunk number 18: pse_tutorial.Rnw:429-431
 ###################################################
 uncoupledLHS <- LHS(model=NULL, factors, 50, q, q.arg)
 write.csv(get.data(uncoupledLHS), file="mydata.csv")
 
 
 ###################################################
-### code chunk number 19: pse_tutorial.Rnw:444-445
+### code chunk number 19: pse_tutorial.Rnw:440-441
 ###################################################
 myresults <- apply(get.data(uncoupledLHS), 1, mean)
 
 
 ###################################################
-### code chunk number 20: pse_tutorial.Rnw:448-449
+### code chunk number 20: pse_tutorial.Rnw:444-445
 ###################################################
 coupledLHS <- tell(uncoupledLHS, myresults)
 

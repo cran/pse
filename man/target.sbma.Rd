@@ -8,8 +8,8 @@
 	present a measure of agreement equal to or greater than a specified target.
 }
 \usage{
-target.sbma(target, model, factors, q, q.arg, 
-			res.names, COR, eps = 5e-04, init, inc, FUN = min)
+target.sbma(target, model, factors, q = NULL, q.arg = NULL, res.names = NULL, 
+			method=c("HL", "random"), opts=list(), init, inc, FUN = min)
 }
 \arguments{
   \item{target}{
@@ -32,13 +32,11 @@ target.sbma(target, model, factors, q, q.arg,
   \item{res.names}{
 	  Optional: what are the names of the model results? (Used mainly for plotting)
 }
-  \item{COR}{
-	  The desired correlation matrix between the model variables. If none is provided, the function will 
-	  generate a zero-correlation Latin Hypercube.
+  \item{method}{
+	  The desired method for the generation of the hypercubes. Please refer to the \code{LHS} help page.
 }
-  \item{eps}{
-	  The tolerance between the prescribed correlation and the actual correlation present in the
-	  generated Latin Hypercube.
+  \item{opts}{
+	  Additional options for the method chosen. Please refer to the \code{LHS} help page.
 }
   \item{init}{
 	  The size of the initial LHS generated.

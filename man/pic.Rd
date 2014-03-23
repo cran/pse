@@ -1,5 +1,6 @@
 \name{pic}
 \alias{pic}
+\alias{print.pic}
 \title{
 	Partial Inclination Coefficient
 }
@@ -8,25 +9,27 @@
 	in relation with all model input variables.
 }
 \usage{
-pic(LHS, nboot = 0, conf = 0.95)
+pic(X, y, nboot, conf, \dots)
+\method{print}{pic}(x, \dots)
 }
 \arguments{
-  \item{LHS}{
-	  The LHS object containing the input and output for the model.
-}
+  \item{X}{a data frame (or object coercible by \code{as.data.frame})
+    containing the design of experiments (model input variables).}
+  \item{y}{a vector containing the responses corresponding to the design
+    of experiments (model output variables).}
   \item{nboot}{
 	  Number of bootstrap replicates
 }
   \item{conf}{
 	  Confidence of the bootstrap interval
 }
+  \item{x}{the object returned by \code{pcc}.}
+\item{\dots}{Currently ignored}
 }
-\details{
-	Warning: in the current version, bootstraping only works for models with 
-	a single output variable. This will be fixed in later versions of the
-	package.
+
+\source{
+  based on code of pcc function on sensitivity package
+  by Gilles Pujol, Bertrand Iooss, Alexandre Janon.
 }
-\author{
-	Function by Andre Chalom, based on pcc function on sensitivity package
-	by Gilles Pujol, Bertrand Iooss, Alexandre Janon.
-}
+
+\author{Andre Chalom, based on code by Gilles Pujol, Bertrand Iooss, Alexandre Janon}      

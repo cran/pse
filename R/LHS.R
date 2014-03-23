@@ -1,6 +1,10 @@
 LHS <-
-	function (model=NULL, factors, N, q=NULL, q.arg=NULL, res.names=NULL, COR=0, eps=0.0005, nboot=0, repetitions=1) {
+	function (model=NULL, factors, N, q=NULL, q.arg=NULL, res.names=NULL, method=c("HL", "random"),
+			  opts=list(), nboot=0, repetitions=1, cl = NULL) {
 		# Input validation for common errors and "default" value handling:
+		method = match.arg(method)
+		my.opts = list(COR=0, eps=0.0005)
+		my.opts[names(opts)] <- opts
 		if(is.numeric(factors) && length(factors) == 1) factors=paste("I", 1:factors, sep="")
 		else if (!is.character(factors)) {
 			stop("Error in function LHS: factors should be either a single number or a character vector")
@@ -16,6 +20,7 @@ LHS <-
 		else if (length(q)==1)  q=rep(q, length(factors))
 		if (is.null(q.arg)) q.arg =rep( list(list()), length(factors))
 		else if (FALSE %in% sapply(q.arg, is.list)) q.arg <- rep(list(q.arg), length(factors))
+		if (!is.null(cl)) require(parallel)
 		prcc <- NA
 		res <- NA
 
@@ -24,26 +29,33 @@ LHS <-
 		colnames(L) <- factors
 		for (i in 1:length(factors)) 
 			L[,i] <- sample(do.call(q[[i]], c(list(p = 1:N/N-1/N/2), q.arg[[i]])))
-		# Corrects the correlation terms
-		L <- LHScorcorr(L, COR,eps=eps); 
-
+		# Corrects the correlation terms, for HL method for LHS
+		if (method == "HL") {
+			L <- LHScorcorr(L, COR = my.opts$COR, eps = my.opts$eps); 
+		}
 		# Runs the actual model
 		if (! is.null(model)) {
 			# First run, is independent of "repetitions"
-			tmp.res <- t(model(L));
-			if(dim(tmp.res)[1] == 1) tmp.res = t(tmp.res)
+			if (is.null(cl)) {
+				tmp.res <- t(model(L));
+				if(dim(tmp.res)[1] == 1) tmp.res = t(tmp.res)
+			}
+			else {
+				tmp.res <- clusterRun(cl, model, L)
+			}
 			# and tells us the number of model outputs
 			n.outs <- dim(tmp.res)[2]
 			res <- array(tmp.res, dim=c(N, n.outs, repetitions));
 			if(repetitions> 1) for (i in 2:repetitions) {
-				res[,,i] <- t(model(L));
+				if (is.null(cl)) res[,,i] <- t(model(L))
+				else res[,,i] <- clusterRun(cl, model, L)
 			}
 			prcc <- internal.prcc(L, res, nboot)
 		}
 
 		if (is.null(res.names) && ! is.na(res)) res.names <- paste("O", 1:dim(res)[2], sep="")
 		X <- list(call=match.call(), N=N, data=L, factors=factors, q=q, q.arg=q.arg, 
-				  COR=COR, eps=eps, model=model, res=res, prcc=prcc,
+				  opts = my.opts, model=model, res=res, prcc=prcc,
 				  res.names=res.names);
 		class(X) <- "LHS"
 		return(X);
@@ -58,6 +70,9 @@ print.LHS <- function(x, ...) {
 	  cat("Results:\n"); print (x$res.names);
 	  cat("PRCC:\n"); print (x$prcc);
 }
+
+tell <- function(x, y = NULL, ...)
+	  UseMethod("tell")
 
 tell.LHS <- function (x, y, res.names=NULL, nboot=0, ...) {
 	tmp.res <- t(y);
@@ -82,7 +97,7 @@ tell.LHS <- function (x, y, res.names=NULL, nboot=0, ...) {
 internal.prcc <- function (L, res, nboot) {
 	# Reduces the res object to a 2-dimensional array
 	res <- apply(res, c(1,2), mean)
-	f <- function(r) sensitivity::pcc(L, r, nboot=nboot, rank=T)
+	f <- function(r) pcc(L, r, nboot=nboot, rank=T)
 	return(apply(res, 2, f))
 }
 

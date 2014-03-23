@@ -290,14 +290,10 @@ In the ecological literature, it is usual to refer to the partial derivatives
 of the model response in respect to each parameter as ``the sensitivity'' of 
 the model response in respect to each parameter. One analog measure in stochastic
 models is the Partial Inclination Coefficient (pic) of the model response in respect
-to each parameter. {\em Please note} that in the current version of the package,
-the pic function only works for models with one response variable, and should be
-considered in {\em beta}\footnote{Future releases of the package will probably
-merge the prcc and pic calls in a more friendly structure}:
+to each parameter. 
 
 <<pic>>=
-p <- pic(myLHS)
-print(p$pic)
+pic(myLHS, nboot=40)
 @
 
 \subsection{Agreement between runs}

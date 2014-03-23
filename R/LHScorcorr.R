@@ -1,6 +1,6 @@
 LHScorcorr <-
 	function (vars, COR = 0, eps = 0.005, echo=FALSE, maxIt = 0) {
-		if (COR==0) COR = matrix(0,dim(vars)[2],dim(vars)[2])
+		if (! is.matrix(COR)) COR = matrix(0,dim(vars)[2],dim(vars)[2])
 		if (maxIt==0) maxIt = 2*sqrt(dim(vars)[1])
 		internal.LHScorcorr(vars, COR, 2, eps, 1, echo, maxIt)
 	}
