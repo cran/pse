@@ -352,8 +352,8 @@ modelRun <- function (dados) {
 }
 @
 
-The hypercube is generated exactly in the same way. However,
-now we have the option to give names (which will be used
+The hypercube is generated exactly in the same way. We also
+have the option to give names (which will be used
 in the plots below) to each response variable.
 
 <<multiLHS>>=

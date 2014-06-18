@@ -1,3 +1,6 @@
+2014-06-17	Andre Chalom
+	* DESCRIPTION: Version is 0.3.4.
+
 2014-03-18	Andre Chalom
 	* DESCRIPTION: Version is 0.3.3.
 	* NAMESPACE, R/cluster.R, man/machinefile.Rd: Added functions to

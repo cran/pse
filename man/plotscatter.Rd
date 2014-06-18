@@ -7,7 +7,7 @@
 	Produces a series of scatterplots from data.
 }
 \usage{
-plotscatter(vars, res = NULL, index.data, index.res, add.lm, ...)
+plotscatter(vars, res = NULL, index.data, index.res, add.lm, ylab = NULL, ...)
 corPlot(...)
 }
 \arguments{
@@ -29,6 +29,10 @@ corPlot(...)
   \item{add.lm}{
 	  Boolean. Whether to include a simple linear model on the plots. Defaults to TRUE.
 }
+  \item{ylab}{
+	  Label for the x axis. 
+	  Uses the name provided in the res.names argument from the LHS function if left blank.
+  }
   \item{\dots}{
 	  Additional parameters to pass to the lower level plotting functions
 }
@@ -38,4 +42,8 @@ corPlot(...)
 	renamed to \code{plotscatter} for padronization with other graphical
 	functions. The function \code{corPlot} is retained for backward compatibility
 	with with earlier versions, but will be removed on future updates.
+}
+\examples{
+myLHS <- LHS(model=function(x) x[,1]+x[,2]*x[,3], factors=3, N=20)
+plotscatter(myLHS)
 }
