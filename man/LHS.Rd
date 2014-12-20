@@ -23,8 +23,6 @@
 	Hypercube samples, and allowing the user to run the simulation
 	model independently. The method \code{tell} allows to pass the simulation
 	results to the incomplete object.
-
-	The 
 }
 \usage{
 LHS(model = NULL, factors, N, q = NULL, q.arg = NULL, res.names = NULL, 

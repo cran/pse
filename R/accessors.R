@@ -1,21 +1,21 @@
 get.results <-
-function(LHS, get.mean=TRUE) { 
+function(obj, get.mean=TRUE) { 
 	# IF the object is incomplete (see tell method)
-	if (is.null(dim(LHS$res))) {return (NA)}
+	if (is.null(dim(obj$res))) {return (NA)}
 
 	if(get.mean) {
-		return (apply(LHS$res, c(1,2), mean)) 
+		return (apply(obj$res, c(1,2), mean)) 
 	} else {
-		return (LHS$res) 
+		return (obj$res) 
 	}
 }
 
 get.data <-
-function(LHS) {
-	return (LHS$data) 
+function(obj) {
+	return (obj$data) 
 }
 
-get.N <- function(LHS) {return (dim(get.data(LHS))[1]) }
-get.ninputs <- function(LHS) {return (dim(get.data(LHS))[2]) }
-get.noutputs <- function(LHS) {return (dim(get.results(LHS))[2]) }
-get.repetitions <- function(LHS) {return (dim(get.results(LHS, get.mean=FALSE))[3]) }
+get.N <- function(obj) {return (dim(get.data(obj))[1]) }
+get.ninputs <- function(obj) {return (dim(get.data(obj))[2]) }
+get.noutputs <- function(obj) {return (dim(get.results(obj))[2]) }
+get.repetitions <- function(obj) {return (dim(get.results(obj, get.mean=FALSE))[3]) }

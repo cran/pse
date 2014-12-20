@@ -47,6 +47,8 @@ function(x, xlim = NULL, ylim = NULL, labels = TRUE,
   # bias
 
   if ("bias" %in% colnames(x)) {
+	  # added by A.C. 2014: if bias is NA, it should not be added
+	  x[["bias"]][is.na(x[["bias"]])]  <- 0
     xx <- x[["original"]] - x[["bias"]]
   } else {
     xx <- x[["original"]]

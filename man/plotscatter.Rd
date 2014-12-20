@@ -1,6 +1,5 @@
 \name{plotscatter}
 \alias{plotscatter}
-\alias{corPlot}
 \title{Produces a series of scatterplots from data
 }
 \description{
@@ -8,12 +7,11 @@
 }
 \usage{
 plotscatter(vars, res = NULL, index.data, index.res, add.lm, ylab = NULL, ...)
-corPlot(...)
 }
 \arguments{
   \item{vars}{
-	  Either a data.frame consisting of the data to plot on the x axis, or an LHS object
-	  containing the data to be plot
+	  Either a data.frame consisting of the data to plot on the x axis, or an LHS object,
+	  or a PLUE object containing the data to be plot
 }
   \item{res}{
 	  A data.frame consisting of the model results to be plotted on the y axis, if
@@ -40,8 +38,7 @@ corPlot(...)
 \note{
 	This function was called \code{corPlot} in older releases, 
 	renamed to \code{plotscatter} for padronization with other graphical
-	functions. The function \code{corPlot} is retained for backward compatibility
-	with with earlier versions, but will be removed on future updates.
+	functions. The function \code{corPlot} was removed in pse 0.4.0.
 }
 \examples{
 myLHS <- LHS(model=function(x) x[,1]+x[,2]*x[,3], factors=3, N=20)

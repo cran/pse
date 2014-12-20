@@ -13,9 +13,9 @@ S3method(pic, default)
 S3method(pic, LHS)
 S3method(print, pic)
 S3method(print, pcc)
+S3method(print, PLUE)
+S3method(plot, PLUE)
 
 # Explicitly exports the LHS methods
 export(get.data, get.results, get.N, get.ninputs, get.noutputs, get.repetitions)
-export(tell, LHScorcorr, LHS, plotecdf, plotprcc, plotscatter, sbma, target.sbma, pic, cv, plotcv, machinefile)
-# Deprecated, will be removed
-export(corPlot)
+export(tell, LHScorcorr, LHS, PLUE, plotecdf, plotprcc, plotscatter, sbma, target.sbma, pic, cv, plotcv, machinefile)

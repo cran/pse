@@ -1,15 +1,13 @@
-corPlot <- function (...) {warning("corPlot is deprecated, use plotscatter instead"); plotscatter(...)}
 plotscatter <-
 	function (vars, res=NULL, index.data=NULL, index.res=NULL, add.lm=TRUE, ylab = NULL, ...) {
-		if (class(vars)=="LHS") {
+		if (class(vars)=="LHS" | class(vars)=="PLUE") {
 			if (is.null(index.data)) index.data <- 1:get.ninputs(vars)
 			if (is.null(index.res)) index.res <- 1:get.noutputs(vars)
 			data=get.data(vars)
 			results=get.results(vars)
 			if(is.null(ylab)) ylab = vars$res.names[index.res]
 			plotscatter(data[,index.data], results[,index.res], add.lm=add.lm, ylab = ylab, ...)
-		}
-		else {
+		} else {
 			res <- as.data.frame(res)
 			if (is.null(dim(vars))) {nplots <-1} else {nplots <- dim(vars)[2]}
 			if (is.null(dim(res))) {nplots <-nplots*1} else {nplots <- nplots* dim(res)[2]}

@@ -12,18 +12,21 @@
 	is the preferred method for accessing the data and result
 	data frames from an LHS object, as the internal structure of
 	the object may vary between versions of the package.
+
+	Support for these accessors is being developed for PLUE objects
+	as well, but some bugs may occur.
 }
 \usage{
-get.results(LHS, get.mean=TRUE)
-get.data(LHS)
-get.N(LHS)
-get.ninputs(LHS)
-get.noutputs(LHS)
-get.repetitions(LHS)
+get.results(obj, get.mean=TRUE)
+get.data(obj)
+get.N(obj)
+get.ninputs(obj)
+get.noutputs(obj)
+get.repetitions(obj)
 }
 \arguments{
-  \item{LHS}{
-	  The LHS object
+  \item{obj}{
+	  The LHS or PLUE object
   }
   \item{get.mean}{
 	  In case of stochastic models, when several model runs are required for the

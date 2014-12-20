@@ -20,9 +20,6 @@ LHS <-
 		else if (length(q)==1)  q=rep(q, length(factors))
 		if (is.null(q.arg)) q.arg =rep( list(list()), length(factors))
 		else if (FALSE %in% sapply(q.arg, is.list)) q.arg <- rep(list(q.arg), length(factors))
-		if (!is.null(cl)) require(parallel)
-		prcc <- NA
-		res <- NA
 
 		# Generates the hypercube data
 		L <- as.data.frame(matrix(nrow=N, ncol=length(factors)));
@@ -34,24 +31,8 @@ LHS <-
 			L <- LHScorcorr(L, COR = my.opts$COR, eps = my.opts$eps); 
 		}
 		# Runs the actual model
-		if (! is.null(model)) {
-			# First run, is independent of "repetitions"
-			if (is.null(cl)) {
-				tmp.res <- t(model(L));
-				if(dim(tmp.res)[1] == 1) tmp.res = t(tmp.res)
-			}
-			else {
-				tmp.res <- clusterRun(cl, model, L)
-			}
-			# and tells us the number of model outputs
-			n.outs <- dim(tmp.res)[2]
-			res <- array(tmp.res, dim=c(N, n.outs, repetitions));
-			if(repetitions> 1) for (i in 2:repetitions) {
-				if (is.null(cl)) res[,,i] <- t(model(L))
-				else res[,,i] <- clusterRun(cl, model, L)
-			}
-			prcc <- internal.prcc(L, res, nboot)
-		}
+		res <- internal.run(cl, model, L, repetitions)
+		prcc <- internal.prcc(L, res, nboot)
 
 		if (is.null(res.names) && ! is.na(res)) res.names <- paste("O", 1:dim(res)[2], sep="")
 		X <- list(call=match.call(), N=N, data=L, factors=factors, q=q, q.arg=q.arg, 
@@ -60,6 +41,28 @@ LHS <-
 		class(X) <- "LHS"
 		return(X);
 	}
+
+internal.run <- function(cl, model, L, repetitions) {
+	if (is.null(model)) {return(NA)}
+	# First run, is independent of "repetitions"
+	if (is.null(cl)) {
+		tmp.res <- t(model(L));
+		if(dim(tmp.res)[1] == 1) tmp.res = t(tmp.res)
+	}
+	else {
+		tmp.res <- clusterRun(cl, model, L)
+	}
+	# and tells us the number of model outputs
+	n.outs <- dim(tmp.res)[2]
+	N <- dim(L)[1]
+	res <- array(tmp.res, dim=c(N, n.outs, repetitions));
+	if(repetitions> 1) for (i in 2:repetitions) {
+		if (is.null(cl)) res[,,i] <- t(model(L))
+		else res[,,i] <- clusterRun(cl, model, L)
+	}
+	return(res)
+}
+
 
 ##Methods
 
@@ -95,6 +98,7 @@ tell.LHS <- function (x, y, res.names=NULL, nboot=0, ...) {
 }
 
 internal.prcc <- function (L, res, nboot) {
+	if (is.null(dim(res))) {return (NA)}
 	# Reduces the res object to a 2-dimensional array
 	res <- apply(res, c(1,2), mean)
 	f <- function(r) pcc(L, r, nboot=nboot, rank=T)

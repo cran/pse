@@ -6,15 +6,19 @@
 }
 \description{
 	Plots the empirical cumulative density function
-   or the partial rank correlation coefficient from an LHS object.
+	or the partial rank correlation coefficient from an LHS object
+	or PLUE object. 
 }
 \usage{
-plotecdf(LHS, stack = FALSE, index.res, col, xlab = NULL, ...)
-plotprcc(LHS, index.res, col, ylab = NULL, ...)
+plotecdf(obj, stack = FALSE, index.res, col, xlab = NULL, ...)
+plotprcc(obj, index.res, col, ylab = NULL, ...)
 }
 \arguments{
-  \item{LHS}{
-	  The LHS object containing the simulation results to be plotted.
+  \item{obj}{
+	  The LHS or PLUE object containing the simulation results to be plotted.
+
+	  NOTICE: plotecdf only accepts LHS objects! For plotting the likelihood profile
+	  from a PLUE object, simply use \code{plot(obj)}
 }
   \item{stack}{
 	  If the results is a data.frame with several variables, stack=FALSE generates
