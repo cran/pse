@@ -1,3 +1,7 @@
+2015-07-07  Andre Chalom
+  * Version is 0.4.2.
+  * Fixing Imports and Depends, title now in title case
+
 2014-11-23	Andre Chalom
 	* DESCRIPTION: Version is 0.4.0, introducing PLUE method,
 	fixed the calls for parallel.

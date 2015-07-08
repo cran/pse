@@ -60,11 +60,14 @@ PLUE <- function(model=NULL, factors, N, LL, start, res.names=NULL,
 	if (N < 1000) {
 		stop ("Error, N is to small. Use N=1000 or larger")
 	}
+	s <- LL(start)
+	if (is.infinite(s) | is.nan(s) | is.na(s)) {
+		stop ("Error, LL(start) should be a valid number.")
+	}
 
 	if (method=="internal") {
 		data = MCMC.internal(LL, start, N, my.opts)
-	} else { # using the mcmc package
-		require(mcmc)
+	} else { # using the mcmc package. May fail if mcmc is not installed
 		outfun <- function(x) return(c(x, -LL(x))) # makes metrop return the nLL along with each data point
 		temp <- mcmc::metrop(LL, start, N, blen=my.opts$blen, nspac=my.opts$nspac, scale=my.opts$scale, outfun=outfun)
 		data <- list(L=as.data.frame(temp$batch[,-ncol(temp$batch)]), nLL=temp$batch[,ncol(temp$batch)])
