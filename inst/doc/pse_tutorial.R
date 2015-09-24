@@ -136,20 +136,20 @@ targetLHS <- target.sbma (target=0.3, modelRun, factors,
 
 
 ###################################################
-### code chunk number 18: pse_tutorial.Rnw:429-431
+### code chunk number 18: pse_tutorial.Rnw:432-434
 ###################################################
 uncoupledLHS <- LHS(model=NULL, factors, 50, q, q.arg)
 write.csv(get.data(uncoupledLHS), file="mydata.csv")
 
 
 ###################################################
-### code chunk number 19: pse_tutorial.Rnw:440-441
+### code chunk number 19: pse_tutorial.Rnw:443-444
 ###################################################
 myresults <- apply(get.data(uncoupledLHS), 1, mean)
 
 
 ###################################################
-### code chunk number 20: pse_tutorial.Rnw:444-445
+### code chunk number 20: pse_tutorial.Rnw:447-448
 ###################################################
 coupledLHS <- tell(uncoupledLHS, myresults)
 
