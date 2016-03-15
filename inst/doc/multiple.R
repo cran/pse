@@ -36,7 +36,8 @@ plotprcc(LHS2)
 ###################################################
 ### code chunk number 5: cv
 ###################################################
-cv(get.results(LHS2)) # global CV
+r <- get.results(LHS2)
+sd(r) / mean(r) # global CV
 plotcv(LHS2)
 
 
